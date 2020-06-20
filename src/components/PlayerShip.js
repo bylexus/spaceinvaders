@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import Bullets from './Bullets.js';
+import Bullets from './Bullets';
+import LiveContainer from './LiveContainer';
 
 const EXPLOSION = 'explosion';
 const EXPLOSION_SOUND = 'explosion1';
@@ -20,6 +21,7 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
         this.bullets = new Bullets(scene);
         this.autoFire = true;
 
+        this.maxLives = 3;
         this.lives = 3;
     }
 
@@ -29,6 +31,17 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
         scene.load.image(SHIP_SPRITE_3, IMAGES.ship3);
         scene.load.image(SHIP_SPRITE_4, IMAGES.ship4);
         Bullets.preload(scene);
+        LiveContainer.preload(scene);
+    }
+
+    get lives() {
+        return this._lives || 0;
+    }
+
+    set lives(lives) {
+        this._lives = Math.min(this.maxLives, Number(lives));
+        this.updateLivesContainer(this._lives);
+        console.log(this._lives);
     }
 
     fire(time) {
@@ -51,6 +64,13 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
         } else {
             this.setVisible(false);
         }
+    }
+
+    updateLivesContainer(lives) {
+        if (!this.liveContainer) {
+            this.liveContainer = new LiveContainer(this.scene, 0, 0, this.lives);
+        }
+        this.liveContainer.updateLives(lives);
     }
 
     playExplosionAnimation() {

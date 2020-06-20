@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import Bullets from './Bullets.js';
+import Bullets from './Bullets';
+import Bonus, { TYPES as BONUS_TYPES } from './Bonus';
 import { IMAGES, FOE_SPRITE_3, FOE_SPRITE_4, FOE_SPRITE_5, EXPLOSION_SOUND, EXPLOSION_SPRITE } from '../constants';
 
 const foes = [FOE_SPRITE_3, FOE_SPRITE_4, FOE_SPRITE_5];
@@ -21,17 +22,17 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite {
         this.bullets.propertyValueSet('angle', 180);
 
         this.firePropability = 2;
+        this.bonusProbability = 100;
         // this.firePropability = 0.08;
         this.hitCount = 3;
     }
 
     static preload(scene) {
-        // scene.load.image(FOE_SPRITE_1, foeImg1);
-        // scene.load.image(FOE_SPRITE_2, foeImg2);
         scene.load.image(FOE_SPRITE_3, IMAGES.foe_3);
         scene.load.image(FOE_SPRITE_4, IMAGES.foe_4);
         scene.load.image(FOE_SPRITE_5, IMAGES.foe_5);
         Bullets.preload(scene);
+        Bonus.preload(scene);
     }
 
     fire(time) {
@@ -54,6 +55,8 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite {
         } else {
             this.playExplosionAnimation();
             this.setVisible(false);
+            this.dropBonus();
+            this.destroy(true);
         }
     }
 
@@ -89,6 +92,17 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite {
         let randomFire = Phaser.Math.FloatBetween(0, 100);
         if (randomFire <= this.firePropability) {
             this.fire(time);
+        }
+    }
+
+    dropBonus() {
+        let randomDrop = Phaser.Math.FloatBetween(0, 100);
+        if (randomDrop <= this.bonusProbability) {
+            let x = this.parentContainer.x + this.x;
+            let y = this.parentContainer.y + this.y;
+
+            let bonus = this.scene.createBonus();
+            bonus.setPosition(x, y);
         }
     }
 }

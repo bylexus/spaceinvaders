@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import PlayerShip from '../components/PlayerShip.js';
 import FoeContainer from '../components/FoeContainer.js';
+import Bonus, { TYPES as BONUS_TYPES } from '../components/Bonus';
 import {
     IMAGES,
     SOUNDS,
@@ -45,10 +46,17 @@ export default class GameScene extends Phaser.Scene {
         // Create animations:
         this.createAnimations();
 
+        // Bonus group:
+        this.bonusGroup = this.add.group();
+
         // Create game items
         this.createPlayers();
         this.createKeysForPlayers();
         this.createFoes(this.foes);
+
+        // Create colliders for players and bonuses:
+        this.physics.add.overlap(this.player1, this.bonusGroup, this.onBonusHit, null, this);
+        this.physics.add.overlap(this.player2, this.bonusGroup, this.onBonusHit, null, this);
 
         // Animate Foes
         this.tweens.add({
@@ -67,6 +75,14 @@ export default class GameScene extends Phaser.Scene {
             repeat: -1,
             yoyo: true,
         });
+
+        // Place live indicators:
+        this.liveGroup = this.add.group([this.player1.liveContainer, this.player2.liveContainer]);
+        this.player1.liveContainer.x = 5;
+        this.player1.liveContainer.y = 16;
+        this.player2.liveContainer.x = width - this.player2.liveContainer.getBounds().width;
+        this.player2.liveContainer.y = 16;
+        this.children.bringToTop(this.liveGroup);
 
         // Create and start GetReady text:
         this.createGetReady();
@@ -93,7 +109,7 @@ export default class GameScene extends Phaser.Scene {
             this.physics.add.overlap(this.player2.bullets, foe, this.onFoeHit, null, this);
         });
 
-        // Create colloders for players:
+        // Create colliders for players:
         this.physics.add.overlap(this.foeContainer.bulletPool, this.player1, this.onPlayerHit, null, this);
         this.physics.add.overlap(this.foeContainer.bulletPool, this.player2, this.onPlayerHit, null, this);
     }
@@ -128,6 +144,14 @@ export default class GameScene extends Phaser.Scene {
         this.handleKeyInputForPlayer(this.player2, time, delta, perSecondFactor);
     }
 
+    createBonus() {
+        let types = Object.values(BONUS_TYPES);
+        let type = types[Phaser.Math.Between(0, types.length - 1)];
+        let bonus = new Bonus(this, 0, 0, { type });
+        this.bonusGroup.add(bonus);
+        return bonus;
+    }
+
     handleKeyInputForPlayer(player, time, delta, perSecondFactor) {
         let velocity = 200;
 
@@ -160,6 +184,14 @@ export default class GameScene extends Phaser.Scene {
             bullet.setActive(false);
             bullet.setVisible(false);
         }
+    }
+
+    onBonusHit(player, bonus) {
+        bonus.applyBonus(player);
+        bonus.setActive(false);
+        bonus.setVisible(false);
+        bonus.destroy(true);
+        console.log('bonus!');
     }
 
     createAnimations() {

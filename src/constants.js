@@ -14,7 +14,10 @@ import ship2 from './assets/ship-2.png';
 import ship3 from './assets/ship-3.png';
 import ship4 from './assets/ship-4.png';
 
-import shoot_img from '../assets/shoot.png';
+import shoot_img from './assets/shoot.png';
+import lives_img from './assets/lives.png';
+
+import bonuses_img from './assets/bonuses.png';
 
 export const FOE_SPRITE_1 = 'foeImg1';
 export const FOE_SPRITE_2 = 'foeImg2';
@@ -32,6 +35,8 @@ export const EXPLOSION_SOUND = 'explosion1';
 export const SPACE_SPRITE = 'space';
 export const STARS_BG_SPRITE = 'stars_bg';
 export const BULLET_SPRITE = 'bullet';
+export const LIVES_SPRITE = 'lives';
+export const BONUS_SPRITE = 'bonus';
 
 export const IMAGES = {
     foe_3: foeImg3,
@@ -48,6 +53,8 @@ export const IMAGES = {
     explosion,
 
     shoot: shoot_img,
+    lives: lives_img,
+    bonus: bonuses_img,
 };
 
 export const SOUNDS = {
