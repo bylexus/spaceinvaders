@@ -5,6 +5,7 @@ import FoeContainer from '../components/FoeContainer.js';
 import Bonus, { TYPES as BONUS_TYPES } from '../components/Bonus';
 import {
     IMAGES,
+    SCENES,
     SOUNDS,
     SPACE_SPRITE,
     STARS_BG_SPRITE,
@@ -17,7 +18,7 @@ import {
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
-        super('game-scene');
+        super(SCENES.game);
         this.bg = null;
         this.player1 = null;
         this.player2 = null;
@@ -125,6 +126,14 @@ export default class GameScene extends Phaser.Scene {
             left: Phaser.Input.Keyboard.KeyCodes.K,
             right: Phaser.Input.Keyboard.KeyCodes.L,
             shoot: Phaser.Input.Keyboard.KeyCodes.U,
+        });
+
+        this.input.keyboard.on('keydown-P', (e) => {
+            if (this.gameRuns) {
+                e.stopPropagation();
+                this.scene.pause(SCENES.game);
+                this.scene.run(SCENES.pause);
+            }
         });
     }
 

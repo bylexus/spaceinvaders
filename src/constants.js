@@ -78,3 +78,8 @@ export const SOUNDS = {
     explosion_j: explosion_sound_j,
     explosion_n: explosion_sound_n,
 };
+
+export const SCENES = {
+    game: 'game',
+    pause: 'pause',
+};
