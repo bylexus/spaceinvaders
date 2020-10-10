@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import GameScene from './scenes/GameScene';
 import PauseScene from './scenes/PauseScene';
+import GameOverScene from './scenes/GameOverScene';
 import './css/styles.css';
 
 const config = {
@@ -21,7 +22,7 @@ const config = {
             // debugStaticBodyColor: 0xffffff
         },
     },
-    scene: [GameScene, PauseScene],
+    scene: [GameScene, PauseScene, GameOverScene],
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,

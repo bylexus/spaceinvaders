@@ -82,4 +82,5 @@ export const SOUNDS = {
 export const SCENES = {
     game: 'game',
     pause: 'pause',
+    gameover: 'gameover',
 };

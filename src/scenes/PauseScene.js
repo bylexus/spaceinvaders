@@ -1,15 +1,13 @@
 import Phaser from 'phaser';
 
-import { IMAGES, SPACE_SPRITE, SCENES } from '../constants';
+import { SCENES } from '../constants';
 
 export default class PauseScene extends Phaser.Scene {
     constructor() {
         super(SCENES.pause);
     }
 
-    preload() {
-        this.load.image(SPACE_SPRITE, IMAGES.space);
-    }
+    preload() {}
 
     create() {
         let { width, height } = this.sys.game.canvas;

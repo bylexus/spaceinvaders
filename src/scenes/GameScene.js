@@ -193,15 +193,21 @@ export default class GameScene extends Phaser.Scene {
             player.hit();
             bullet.setActive(false);
             bullet.setVisible(false);
+            // If both players are death, game over!
+            if (this.player1.lives <= 0 && this.player2.lives <= 0) {
+                this.initiateGameOver();
+            }
         }
     }
 
     onBonusHit(player, bonus) {
-        bonus.applyBonus(player);
-        bonus.setActive(false);
-        bonus.setVisible(false);
-        bonus.destroy(true);
-        console.log('bonus!');
+        if (player.active) {
+            bonus.applyBonus(player);
+            bonus.setActive(false);
+            bonus.setVisible(false);
+            bonus.destroy(true);
+            console.log('bonus!');
+        }
     }
 
     createAnimations() {
@@ -254,5 +260,12 @@ export default class GameScene extends Phaser.Scene {
                 this.gameRuns = true;
             },
         });
+    }
+
+    initiateGameOver() {
+        if (this.gameRuns) {
+            this.gameRuns = false;
+            this.scene.run(SCENES.gameover);
+        }
     }
 }

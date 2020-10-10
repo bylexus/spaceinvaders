@@ -6,6 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "docker": "docker run --rm -ti -v $(pwd):/src -p 9000:9000 spaceinvaders bash",
+        "docker-shell": "docker run --rm -ti -v $(pwd):/src spaceinvaders bash",
         "watch": "NODE_ENV=development webpack -d -w",
         "serve": "NODE_ENV=development webpack-dev-server"
     },
@@ -16,19 +17,19 @@
     "author": "Alexander Schenkel <alex@alexi.ch>",
     "license": "MIT",
     "dependencies": {
-        "phaser": "^3.23.0"
+        "phaser": "^3.24.1"
     },
     "devDependencies": {
-        "css-loader": "^3.5.3",
-        "eslint": "^7.2.0",
-        "eslint-config-prettier": "^6.11.0",
-        "eslint-plugin-prettier": "^3.1.3",
-        "file-loader": "^6.0.0",
-        "html-webpack-plugin": "^4.3.0",
-        "prettier": "^2.0.5",
-        "style-loader": "^1.2.1",
-        "webpack": "^4.43.0",
-        "webpack-cli": "^3.3.11",
+        "css-loader": "^4.3.0",
+        "eslint": "^7.11.0",
+        "eslint-config-prettier": "^6.12.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "file-loader": "^6.1.1",
+        "html-webpack-plugin": "^4.5.0",
+        "prettier": "^2.1.2",
+        "style-loader": "^2.0.0",
+        "webpack": "^4.44.2",
+        "webpack-cli": "^3.3.12",
         "webpack-dev-server": "^3.11.0"
     },
     "prettier": {
