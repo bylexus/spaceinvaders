@@ -8,8 +8,9 @@ import {
     SOUNDS,
     SPACE_SPRITE,
     STARS_BG_SPRITE,
-    SHIP_SPRITE_3,
+    // SHIP_SPRITE_3,
     SHIP_SPRITE_4,
+    SHIP_SPRITE_5,
     EXPLOSION_SOUND,
     EXPLOSION_SPRITE,
 } from '../constants';
@@ -92,7 +93,7 @@ export default class GameScene extends Phaser.Scene {
     createPlayers() {
         let { width, height } = this.sys.game.canvas;
         this.player1 = new PlayerShip(this, 0, 0, SHIP_SPRITE_4);
-        this.player2 = new PlayerShip(this, 0, 0, SHIP_SPRITE_3);
+        this.player2 = new PlayerShip(this, 0, 0, SHIP_SPRITE_5);
         let bounds1 = this.player1.getBounds();
         let bounds2 = this.player2.getBounds();
         this.player1.setPosition(50 + bounds1.width / 2, height - bounds1.height / 2 - 10);

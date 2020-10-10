@@ -5,7 +5,7 @@ import LiveContainer from './LiveContainer';
 const EXPLOSION = 'explosion';
 const EXPLOSION_SOUND = 'explosion1';
 
-import { IMAGES, SHIP_SPRITE_1, SHIP_SPRITE_2, SHIP_SPRITE_3, SHIP_SPRITE_4 } from '../constants';
+import { IMAGES, SHIP_SPRITE_1, SHIP_SPRITE_2, SHIP_SPRITE_3, SHIP_SPRITE_4, SHIP_SPRITE_5 } from '../constants';
 
 export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, player) {
@@ -30,6 +30,7 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
         scene.load.image(SHIP_SPRITE_2, IMAGES.ship2);
         scene.load.image(SHIP_SPRITE_3, IMAGES.ship3);
         scene.load.image(SHIP_SPRITE_4, IMAGES.ship4);
+        scene.load.image(SHIP_SPRITE_5, IMAGES.ship5);
         Bullets.preload(scene);
         LiveContainer.preload(scene);
     }

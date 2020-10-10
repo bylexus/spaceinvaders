@@ -1,9 +1,30 @@
 import Phaser from 'phaser';
 import Bullets from './Bullets';
 import Bonus, { TYPES as BONUS_TYPES } from './Bonus';
-import { IMAGES, FOE_SPRITE_3, FOE_SPRITE_4, FOE_SPRITE_5, EXPLOSION_SOUND, EXPLOSION_SPRITE } from '../constants';
+import {
+    IMAGES,
+    FOE_SPRITE_1,
+    FOE_SPRITE_2,
+    FOE_SPRITE_3,
+    FOE_SPRITE_4,
+    FOE_SPRITE_5,
+    FOE_SPRITE_6,
+    FOE_SPRITE_7,
+    FOE_SPRITE_8,
+    EXPLOSION_SOUND,
+    EXPLOSION_SPRITE,
+} from '../constants';
 
-const foes = [FOE_SPRITE_3, FOE_SPRITE_4, FOE_SPRITE_5];
+const foes = [
+    FOE_SPRITE_1,
+    FOE_SPRITE_2,
+    FOE_SPRITE_3,
+    FOE_SPRITE_4,
+    FOE_SPRITE_5,
+    FOE_SPRITE_6,
+    FOE_SPRITE_7,
+    FOE_SPRITE_8,
+];
 
 export default class Foe extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, { foe = null, bulletPool = null }) {
@@ -28,9 +49,14 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite {
     }
 
     static preload(scene) {
+        scene.load.image(FOE_SPRITE_1, IMAGES.foe_1);
+        scene.load.image(FOE_SPRITE_2, IMAGES.foe_2);
         scene.load.image(FOE_SPRITE_3, IMAGES.foe_3);
         scene.load.image(FOE_SPRITE_4, IMAGES.foe_4);
         scene.load.image(FOE_SPRITE_5, IMAGES.foe_5);
+        scene.load.image(FOE_SPRITE_6, IMAGES.foe_6);
+        scene.load.image(FOE_SPRITE_7, IMAGES.foe_7);
+        scene.load.image(FOE_SPRITE_8, IMAGES.foe_8);
         Bullets.preload(scene);
         Bonus.preload(scene);
     }
