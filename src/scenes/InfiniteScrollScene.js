@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
 
 import PlayerShip from '../components/PlayerShip.js';
-import FoeContainer from '../components/FoeContainer.js';
+import Foe from '../components/Foe';
 import Bonus, { TYPES as BONUS_TYPES } from '../components/Bonus';
+import { getFoeBulletGroup, getPlayerBulletGroup } from '../components/BulletGroup';
 import {
     IMAGES,
     SCENES,
@@ -14,15 +15,15 @@ import {
     SHIP_SPRITE_5,
     EXPLOSION_SOUND,
     EXPLOSION_SPRITE,
+    LEVEL_FILES,
 } from '../constants';
 
-export default class GameScene extends Phaser.Scene {
+export default class InfiniteScrollScene extends Phaser.Scene {
     constructor() {
-        super(SCENES.game);
+        super(SCENES.infinitescroll);
         this.bg = null;
         this.player1 = null;
         this.player2 = null;
-        this.foeContainer = null;
         this.keys = {};
         this.gameRuns = false;
     }
@@ -30,20 +31,42 @@ export default class GameScene extends Phaser.Scene {
     preload() {
         this.load.image(SPACE_SPRITE, IMAGES.space);
         this.load.image(STARS_BG_SPRITE, IMAGES.starsBg);
-        PlayerShip.preload(this);
-        FoeContainer.preload(this);
+
         this.load.spritesheet(EXPLOSION_SPRITE, IMAGES.explosion, { frameWidth: 64, frameHeight: 64, endFrame: 15 });
         this.load.audio(EXPLOSION_SOUND, SOUNDS.explosion_a);
+        this.load.tilemapTiledJSON('map', LEVEL_FILES.level00001);
+
+        PlayerShip.preload(this);
+        Foe.preload(this);
     }
 
     create() {
-        let { width, height } = this.sys.game.canvas;
+        let { width: gameWidth, height: gameHeight } = this.sys.game.canvas;
+
+        let map = this.make.tilemap({ key: 'map' });
+
+        let worldBound = map.findObject('metadata', (o) => o.name === 'worldbound');
+        let start = map.findObject('metadata', (o) => o.name === 'start');
+
+        this.physics.world.setBounds(
+            worldBound.x,
+            worldBound.y,
+            worldBound.width,
+            worldBound.height,
+            true,
+            true,
+            false,
+            false
+        );
+
+        let width = worldBound.width;
+        let height = Math.abs(worldBound.height);
 
         // Background stars
-        this.bg = this.add
-            .tileSprite(width / 2, height / 2, width * 1.5, width * 1.5, SPACE_SPRITE)
-            .setOrigin(0.5, 0.5);
-        this.foes = this.add.group();
+        this.bg = this.add.tileSprite(0, 0, gameWidth, gameHeight, SPACE_SPRITE).setOrigin(0, 0);
+
+        // this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        // this.cameras.main.setScroll(0, start.y - 900);
 
         // Create animations:
         this.createAnimations();
@@ -52,68 +75,65 @@ export default class GameScene extends Phaser.Scene {
         this.bonusGroup = this.add.group();
 
         // Create game items
-        this.createPlayers();
+        this.createPlayers(width, start);
         this.createKeysForPlayers();
-        this.createFoes(this.foes);
+        let foeGroup = this.createFoes(map.getObjectLayer('foes').objects);
 
         // Create colliders for players and bonuses:
         this.physics.add.overlap(this.player1, this.bonusGroup, this.onBonusHit, null, this);
         this.physics.add.overlap(this.player2, this.bonusGroup, this.onBonusHit, null, this);
 
-        // Animate Foes
-        this.tweens.add({
-            targets: this.foeContainer,
-            x: '+= 300',
-            duration: 2000,
-            ease: 'Sine.easeInOut',
-            repeat: -1,
-            yoyo: true,
-        });
-        this.tweens.add({
-            targets: this.foeContainer,
-            y: '+= 40',
-            duration: 5000,
-            ease: 'Sine.easeInOut',
-            repeat: -1,
-            yoyo: true,
-        });
+        // Create colliders for players and foe bullets:
+        let foeBullets = getFoeBulletGroup(this);
+        this.physics.add.overlap(this.player1, foeBullets, this.onPlayerHit, null, this);
+        this.physics.add.overlap(this.player2, foeBullets, this.onPlayerHit, null, this);
 
-        // Place live indicators:
+        // Create colliders for foes and player bullets:
+        let playerBullets = getPlayerBulletGroup(this);
+        this.physics.add.overlap(foeGroup, playerBullets, this.onFoeHit, null, this);
+
+        // // Place live indicators:
         this.liveGroup = this.add.group([this.player1.liveContainer, this.player2.liveContainer]);
+        this.player1.liveContainer.setScrollFactor(0);
         this.player1.liveContainer.x = 5;
-        this.player1.liveContainer.y = 16;
+        this.player1.liveContainer.y = 18;
+        this.player2.liveContainer.setScrollFactor(0);
         this.player2.liveContainer.x = width - this.player2.liveContainer.getBounds().width;
-        this.player2.liveContainer.y = 16;
+        this.player2.liveContainer.y = 18;
         this.children.bringToTop(this.liveGroup);
 
-        // Create and start GetReady text:
-        this.createGetReady();
-        this.startGetReadySequence();
+        this.cameras.main.setBounds(worldBound.x, worldBound.y, worldBound.width, worldBound.height);
+        this.cameras.main.useBounds = true;
+        this.cameras.main.startFollow(this.player1, true, 1, 1, 0, this.game.config.height / 2 - this.player1.height);
+
+        // Start GetReady Scene, and wait for its done event:
+        let getReadyScene = this.scene.get(SCENES.getready);
+        getReadyScene.events.once('done', () => {
+            this.scene.stop(getReadyScene);
+            this.gameRuns = true;
+            this.player1.setVelocityY(-50);
+            this.player2.setVelocityY(-50);
+        });
+        this.scene.run(SCENES.getready);
     }
 
-    createPlayers() {
-        let { width, height } = this.sys.game.canvas;
+    createPlayers(worldWidth, startPoint) {
         this.player1 = new PlayerShip(this, 0, 0, SHIP_SPRITE_4);
         this.player2 = new PlayerShip(this, 0, 0, SHIP_SPRITE_5);
         let bounds1 = this.player1.getBounds();
         let bounds2 = this.player2.getBounds();
-        this.player1.setPosition(50 + bounds1.width / 2, height - bounds1.height / 2 - 10);
-        this.player2.setPosition(width - 50 - bounds2.width / 2, height - bounds2.height / 2 - 10);
+        this.player1.setPosition(50 + bounds1.width / 2, startPoint.y - bounds1.height / 2 - 10);
+        this.player2.setPosition(worldWidth - 50 - bounds2.width / 2, startPoint.y - bounds2.height / 2 - 10);
     }
 
-    createFoes() {
-        let { width } = this.sys.game.canvas;
-        this.foeContainer = new FoeContainer(this, -200, 100, width + 200);
-
-        // create colliders for foes:
-        this.foeContainer.each((foe) => {
-            this.physics.add.overlap(this.player1.bullets, foe, this.onFoeHit, null, this);
-            this.physics.add.overlap(this.player2.bullets, foe, this.onFoeHit, null, this);
+    createFoes(foeConfigs) {
+        this.foeGroup = this.physics.add.group();
+        foeConfigs.forEach((config) => {
+            let foe = new Foe(this, config.x, config.y, 'foes', config.name);
+            Object.assign(foe, config);
+            this.foeGroup.add(foe, true);
         });
-
-        // Create colliders for players:
-        this.physics.add.overlap(this.foeContainer.bulletPool, this.player1, this.onPlayerHit, null, this);
-        this.physics.add.overlap(this.foeContainer.bulletPool, this.player2, this.onPlayerHit, null, this);
+        return this.foeGroup;
     }
 
     createKeysForPlayers() {
@@ -131,7 +151,7 @@ export default class GameScene extends Phaser.Scene {
         this.input.keyboard.on('keydown-P', (e) => {
             if (this.gameRuns) {
                 e.stopPropagation();
-                this.scene.pause(SCENES.game);
+                this.scene.pause(SCENES.infinitescroll);
                 this.scene.run(SCENES.pause);
             }
         });
@@ -139,14 +159,18 @@ export default class GameScene extends Phaser.Scene {
 
     update(time, delta) {
         let perSecondFactor = delta / 1000;
-        this.updateBG(time, delta, perSecondFactor);
-        this.updatePlayers(time, delta, perSecondFactor);
+        this.updateBG(time, delta, perSecondFactor || 0);
+        if (this.gameRuns) {
+            this.updatePlayers(time, delta, perSecondFactor);
+        }
     }
 
     updateBG(time, delta, perSecondFactor) {
+        // sync bg position with camera scroll position:
+        this.bg.setPosition(0, this.cameras.main.scrollY);
         this.bg.tilePositionX -= perSecondFactor * 10;
-        this.bg.tilePositionY -= perSecondFactor * 5;
-        this.bg.angle = (this.bg.angle + 1 * perSecondFactor) % 360;
+        this.bg.tilePositionY -= perSecondFactor * 100;
+        // this.bg.angle = (this.bg.angle + 1 * perSecondFactor) % 360;
     }
 
     updatePlayers(time, delta, perSecondFactor) {
@@ -163,32 +187,26 @@ export default class GameScene extends Phaser.Scene {
     }
 
     handleKeyInputForPlayer(player, time, delta, perSecondFactor) {
-        let velocity = 200;
-
         if (player.keys.left.isDown) {
-            player.setVelocityX(-1 * velocity);
+            player.setVelocityX(-1 * player.moveSpeed);
         }
         if (player.keys.right.isDown) {
-            player.setVelocityX(velocity);
+            player.setVelocityX(player.moveSpeed);
         }
         if (!player.keys.left.isDown && !player.keys.right.isDown) {
             player.setVelocityX(0);
         }
-
-        if (player.keys.shoot.isDown) {
-            player.fire(time);
-        }
     }
 
-    onFoeHit(bullet, foe) {
+    onFoeHit(foe, bullet) {
         if (bullet.active) {
-            this.foeContainer.hit(foe);
+            foe.hit(foe);
             bullet.setActive(false);
             bullet.setVisible(false);
         }
     }
 
-    onPlayerHit(bullet, player) {
+    onPlayerHit(player, bullet) {
         if (bullet.active) {
             player.hit();
             bullet.setActive(false);
@@ -198,6 +216,7 @@ export default class GameScene extends Phaser.Scene {
                 this.initiateGameOver();
             }
         }
+        return true;
     }
 
     onBonusHit(player, bonus) {
@@ -206,7 +225,6 @@ export default class GameScene extends Phaser.Scene {
             bonus.setActive(false);
             bonus.setVisible(false);
             bonus.destroy(true);
-            console.log('bonus!');
         }
     }
 
@@ -218,48 +236,6 @@ export default class GameScene extends Phaser.Scene {
                 frameRate: 10,
             });
         }
-    }
-
-    createGetReady() {
-        let { width, height } = this.sys.game.canvas;
-        this.getReadyText = this.add.dom(
-            width / 2,
-            -120,
-            'h1',
-            'color:white;font:Courier;font-size:72pt;text-shadow: -5px 0 10px white, 5px 0 10px white;',
-            'Get Ready!'
-        );
-    }
-
-    startGetReadySequence() {
-        let { height } = this.sys.game.canvas;
-        this.getReadyText.y = -120;
-        this.gameRuns = false;
-        this.tweens.timeline({
-            targets: [this.getReadyText],
-            tweens: [
-                {
-                    y: height / 2,
-                    duration: 500,
-                    ease: 'Bounce.easeOut',
-                    easeParams: [],
-                    loop: 0,
-                    yoyo: false,
-                },
-                {
-                    y: height + 120,
-                    duration: 500,
-                    delay: 1000,
-                    ease: 'Sine',
-                    easeParams: [],
-                    loop: 0,
-                    yoyo: false,
-                },
-            ],
-            onComplete: () => {
-                this.gameRuns = true;
-            },
-        });
     }
 
     initiateGameOver() {

@@ -1,9 +1,28 @@
 import Phaser from 'phaser';
-import Bullets from './Bullets';
+import BulletGroup, { getPlayerBulletGroup } from './BulletGroup';
 import LiveContainer from './LiveContainer';
 
 const EXPLOSION = 'explosion';
 const EXPLOSION_SOUND = 'explosion1';
+
+const FIRE_MODES = {
+    STAGE_1: (player) => {
+        player.nrOfCannons = 1;
+        player.fireRate = 2;
+    },
+    STAGE_2: (player) => {
+        player.fireRate = 4;
+    },
+    STAGE_3: (player) => {
+        player.fireRate = 6;
+    },
+    STAGE_4: (player) => {
+        player.nrOfCannons = 2;
+    },
+    STAGE_5: (player) => {
+        player.nrOfCannons = 3;
+    },
+};
 
 import { IMAGES, SHIP_SPRITE_1, SHIP_SPRITE_2, SHIP_SPRITE_3, SHIP_SPRITE_4, SHIP_SPRITE_5 } from '../constants';
 
@@ -13,16 +32,25 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
         // Needed to init scene and physics:
         scene.add.existing(this);
         scene.physics.add.existing(this);
+        this.body.setSize(this.body.width * 0.75, this.body.height * 0.8);
+
+        this.lastShoot = 0;
+        this.fireRate = 2; // per second
+        this.nrOfCannons = 1;
+        this.fireMode = 'STAGE_1';
+        this.setFireMode(this.fireMode);
 
         this.setBounce(0.2);
         this.setOrigin(0.5, 0);
         this.setCollideWorldBounds(true);
 
-        this.bullets = new Bullets(scene);
+        this.bullets = getPlayerBulletGroup(scene);
         this.autoFire = true;
 
         this.maxLives = 3;
         this.lives = 3;
+
+        this.moveSpeed = 300;
     }
 
     static preload(scene) {
@@ -31,7 +59,7 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
         scene.load.image(SHIP_SPRITE_3, IMAGES.ship3);
         scene.load.image(SHIP_SPRITE_4, IMAGES.ship4);
         scene.load.image(SHIP_SPRITE_5, IMAGES.ship5);
-        Bullets.preload(scene);
+        BulletGroup.preload(scene);
         LiveContainer.preload(scene);
     }
 
@@ -47,7 +75,22 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
 
     fire(time) {
         if (this.scene.gameRuns === true && this.active) {
-            this.bullets.fireBullet(this.x, this.y, time);
+            if (time - this.lastShoot > this.fireDelay) {
+                this.lastShoot = time;
+                switch (this.nrOfCannons) {
+                    case 2:
+                        this.bullets.fireBullet(this.x - 35, this.y, time);
+                        this.bullets.fireBullet(this.x + 35, this.y, time);
+                        break;
+                    case 3:
+                        this.bullets.fireBullet(this.x, this.y, time);
+                        this.bullets.fireBullet(this.x - 35, this.y, time);
+                        this.bullets.fireBullet(this.x + 35, this.y, time);
+                        break;
+                    default:
+                        this.bullets.fireBullet(this.x, this.y, time);
+                }
+            }
         }
     }
 
@@ -63,7 +106,10 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
             await this.playHitAnimation();
             this.setActive(true);
         } else {
+            this.scene.cameras.main.shake(500);
+            this.scene.cameras.main.flash();
             this.setVisible(false);
+            this.setActive(false);
         }
     }
 
@@ -104,5 +150,33 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
         if (this.autoFire) {
             this.fire(time);
         }
+    }
+
+    increaseFire() {
+        let modeKeys = Object.keys(FIRE_MODES);
+        let actIndex = modeKeys.indexOf(this.fireMode);
+        let newIndex = Math.min(actIndex + 1, modeKeys.length - 1);
+        this.setFireMode(modeKeys[newIndex]);
+    }
+
+    setFireMode(modeKey) {
+        let modeFn = FIRE_MODES[modeKey];
+        if (modeFn instanceof Function) {
+            console.log('Set new Fire Mode: ', modeKey);
+            this.fireMode = modeKey;
+            modeFn(this);
+            this.lastShoot = 0;
+        }
+    }
+
+    set fireRate(ratePerSec) {
+        this.fireDelay = 1000 / ratePerSec;
+    }
+
+    get fireRate() {
+        if (this.fireDelay > 0) {
+            return 1000 / this.fireDelay;
+        }
+        return 1;
     }
 }

@@ -14,6 +14,8 @@ import explosion_sound_a from './assets/explosion-a.mp3';
 import explosion_sound_j from './assets/explosion-j.mp3';
 import explosion_sound_n from './assets/explosion-n.mp3';
 
+import foe_spritesheet from './assets/mapeditor/spritesheets/foe-spritesheet.png';
+
 import ship1 from './assets/ship-1.png';
 import ship2 from './assets/ship-2.png';
 import ship3 from './assets/ship-3.png';
@@ -58,6 +60,8 @@ export const IMAGES = {
     foe_7: foeImg7,
     foe_8: foeImg8,
 
+    foe_spritesheet,
+
     ship1,
     ship2,
     ship3,
@@ -79,8 +83,14 @@ export const SOUNDS = {
     explosion_n: explosion_sound_n,
 };
 
+export const LEVEL_FILES = {
+    level00001: './assets/mapeditor/levels/level00001.json',
+};
+
 export const SCENES = {
     game: 'game',
     pause: 'pause',
     gameover: 'gameover',
+    infinitescroll: 'infinitescroll',
+    getready: 'getready',
 };

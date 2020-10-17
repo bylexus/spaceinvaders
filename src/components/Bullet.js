@@ -6,7 +6,9 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, BULLET_SPRITE);
         // Needed to init scene and physics:
         // scene.add.existing(this);
-        scene.physics.add.existing(this);
+        // scene.physics.add.existing(this);
+
+        this.boundsCache = new Phaser.Geom.Rectangle();
     }
 
     static preload(scene) {
@@ -31,12 +33,19 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
 
     preUpdate(time, delta) {
-        let { height } = this.scene.sys.game.canvas;
         super.preUpdate(time, delta);
 
-        if (this.y <= -32 || this.y >= height + 32) {
+        this.getBounds(this.boundsCache);
+        if (
+            this.scene.cameras.main.worldView.contains(this.boundsCache.left, this.boundsCache.top) ||
+            this.scene.cameras.main.worldView.contains(this.boundsCache.right, this.boundsCache.bottom)
+        ) {
+            this.setActive(true);
+            this.setVisible(true);
+        } else {
             this.setActive(false);
             this.setVisible(false);
+            this.setVelocityY(0);
         }
     }
 }

@@ -1,14 +1,15 @@
 import Phaser from 'phaser';
-import GameScene from './scenes/GameScene';
+import GetReadyScene from './scenes/GetReadyScene';
 import PauseScene from './scenes/PauseScene';
 import GameOverScene from './scenes/GameOverScene';
+import InfiniteScrollScene from './scenes/InfiniteScrollScene';
 import './css/styles.css';
 
 const config = {
     type: Phaser.AUTO,
     parent: 'app',
     width: 1024,
-    height: 768,
+    height: 1024,
     physics: {
         default: 'arcade',
         arcade: {
@@ -22,7 +23,7 @@ const config = {
             // debugStaticBodyColor: 0xffffff
         },
     },
-    scene: [GameScene, PauseScene, GameOverScene],
+    scene: [InfiniteScrollScene, GetReadyScene, PauseScene, GameOverScene],
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,

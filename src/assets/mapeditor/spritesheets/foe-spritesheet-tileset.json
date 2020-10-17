@@ -1,0 +1,14 @@
+{ "columns":10,
+ "image":"foe-spritesheet.png",
+ "imageheight":82,
+ "imagewidth":770,
+ "margin":0,
+ "name":"foe-spritesheet",
+ "spacing":0,
+ "tilecount":10,
+ "tiledversion":"1.4.2",
+ "tileheight":80,
+ "tilewidth":75,
+ "type":"tileset",
+ "version":1.4
+}

@@ -58,7 +58,7 @@ export default class PauseScene extends Phaser.Scene {
                         duration: 250,
                         repeat: 0,
                         onComplete: () => {
-                            this.scene.resume(SCENES.game);
+                            this.scene.resume(SCENES.infinitescroll);
                             this.scene.stop(SCENES.pause);
                         },
                     });

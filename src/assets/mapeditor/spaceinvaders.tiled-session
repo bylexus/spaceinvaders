@@ -1,0 +1,112 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "levels/level00001.json",
+    "expandedProjectPaths": [
+        "Templates",
+        "levels",
+        "spritesheets"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/Users/alex/dev/spaceinvaders/assets/src/assets/levels/foe-spritesheet.json": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "/Users/alex/dev/spaceinvaders/src/assets/levels/foe-spritesheet.json": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/Users/alex/dev/spaceinvaders/src/assets/levels/foes-tileset.json": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/Users/alex/dev/spaceinvaders/src/assets/levels/level00001.json": {
+            "scale": 0.25,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 316,
+                "y": 4432
+            }
+        },
+        "/Users/alex/dev/spaceinvaders/src/assets/levels/level00001.json#foes": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/Users/alex/dev/spaceinvaders/src/assets/levels/level00001.tmx#foe1-1": {
+            "dynamicWrapping": true
+        },
+        "/Users/alex/temp/test.tmx#foes": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "foe-spritesheet.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "levels/foe-spritesheet.json": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "levels/level00001.json": {
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 156,
+                "y": 4700
+            }
+        },
+        "levels/level00001.json#foe-spritesheet": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "levels/level00001.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 478,
+                "y": 2426
+            }
+        },
+        "spritesheets/foe-spritesheet-tileset.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "map.lastUsedExportFilter": "JSON map files (*.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 32,
+    "openFiles": [
+        "levels/level00001.json"
+    ],
+    "project": "spaceinvaders.tiled-project",
+    "recentFiles": [
+        "levels/level00001.tmx",
+        "spritesheets/foe-spritesheet-tileset.json",
+        "levels/level00001.json",
+        "foe-spritesheet.json",
+        "/Users/alex/dev/spaceinvaders/src/assets/levels/level00001.json",
+        "/Users/alex/dev/spaceinvaders/src/assets/levels/foe-spritesheet.json",
+        "/Users/alex/dev/spaceinvaders/src/assets/levels/foes-tileset.json",
+        "/Users/alex/temp/test.tmx"
+    ],
+    "resizeMap.removeObjects": false,
+    "tileset.embedInMap": false,
+    "tileset.lastUsedFilter": "JSON tileset files (*.json)",
+    "tileset.lastUsedFormat": "json",
+    "tileset.tileSize": {
+        "height": 80,
+        "width": 75
+    },
+    "tileset.type": 0
+}

@@ -1,71 +1,52 @@
 import Phaser from 'phaser';
-import Bullets from './Bullets';
-import Bonus, { TYPES as BONUS_TYPES } from './Bonus';
-import {
-    IMAGES,
-    FOE_SPRITE_1,
-    FOE_SPRITE_2,
-    FOE_SPRITE_3,
-    FOE_SPRITE_4,
-    FOE_SPRITE_5,
-    FOE_SPRITE_6,
-    FOE_SPRITE_7,
-    FOE_SPRITE_8,
-    EXPLOSION_SOUND,
-    EXPLOSION_SPRITE,
-} from '../constants';
-
-const foes = [
-    FOE_SPRITE_1,
-    FOE_SPRITE_2,
-    FOE_SPRITE_3,
-    FOE_SPRITE_4,
-    FOE_SPRITE_5,
-    FOE_SPRITE_6,
-    FOE_SPRITE_7,
-    FOE_SPRITE_8,
-];
+import { getFoeBulletGroup } from './BulletGroup';
+import Bonus from './Bonus';
+import { EXPLOSION_SOUND, EXPLOSION_SPRITE } from '../constants';
 
 export default class Foe extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, { foe = null, bulletPool = null }) {
-        if (!foe) {
-            foe = foes[Phaser.Math.Between(0, foes.length - 1)];
-        }
-        super(scene, x, y, foe);
+    constructor(scene, x, y, key, frame) {
+        super(scene, x, y, key, frame);
+
         // Needed to init scene and physics:
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.body.setSize(this.body.width * 0.75, this.body.height * 0.5);
+        this.body.setSize(this.body.width * 0.75, this.body.height);
 
         this.setOrigin(0.5, 1);
 
-        this.bullets = bulletPool;
-        this.bullets.propertyValueSet('angle', 180);
+        this.bullets = getFoeBulletGroup(scene, 100);
+        this.bonusProbability = 5;
+        this.firePropability = 20;
+        this.fireRate = 2; // per second
+        this.hitCount = 1;
 
-        this.firePropability = 2;
-        this.bonusProbability = 100;
-        // this.firePropability = 0.08;
-        this.hitCount = 3;
+        this.lastShoot = 0;
+
+        if (!scene.sound.get(EXPLOSION_SOUND)) {
+            scene.sound.add(EXPLOSION_SOUND);
+        }
     }
 
     static preload(scene) {
-        scene.load.image(FOE_SPRITE_1, IMAGES.foe_1);
-        scene.load.image(FOE_SPRITE_2, IMAGES.foe_2);
-        scene.load.image(FOE_SPRITE_3, IMAGES.foe_3);
-        scene.load.image(FOE_SPRITE_4, IMAGES.foe_4);
-        scene.load.image(FOE_SPRITE_5, IMAGES.foe_5);
-        scene.load.image(FOE_SPRITE_6, IMAGES.foe_6);
-        scene.load.image(FOE_SPRITE_7, IMAGES.foe_7);
-        scene.load.image(FOE_SPRITE_8, IMAGES.foe_8);
-        Bullets.preload(scene);
+        // Spritesheet created with TexturePacker:
+        scene.load.multiatlas(
+            'foes',
+            './assets/mapeditor/spritesheets/foe-spritesheet.json',
+            './assets/mapeditor/spritesheets/'
+        );
+
         Bonus.preload(scene);
     }
 
     fire(time) {
         if (this.scene.gameRuns === true) {
-            let x = this.parentContainer.x + this.x;
-            let y = this.parentContainer.y + this.y;
-            this.bullets.fireBullet(x, y, time);
+            if (time - this.lastShoot > this.fireDelay) {
+                this.lastShoot = time;
+                let randomFire = Phaser.Math.FloatBetween(0, 100);
+                if (randomFire <= this.firePropability) {
+                    this.bullets.fireBullet(this.x, this.y, time);
+                }
+            }
         }
     }
 
@@ -90,12 +71,12 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite {
         let boom = this.scene.add.sprite(this.x, this.y, EXPLOSION_SPRITE);
         boom.setOrigin(this.originX, this.originY);
         boom.anims.play(EXPLOSION_SPRITE);
-        this.parentContainer.add(boom);
+        // this.parentContainer.add(boom);
 
         this.scene.sound.play(EXPLOSION_SOUND);
-        let parentContainer = this.parentContainer;
+        // let parentContainer = this.parentContainer;
         boom.anims.currentAnim.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
-            parentContainer.remove(boom, true);
+            // parentContainer.remove(boom, true);
         });
     }
 
@@ -115,20 +96,33 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite {
 
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
-        let randomFire = Phaser.Math.FloatBetween(0, 100);
-        if (randomFire <= this.firePropability) {
-            this.fire(time);
+        this.fire(time);
+        // Is foe out of sight (bottom)? then destroy it to save resources:
+        if (
+            this.scene.gameRuns &&
+            this.getBounds().top > this.scene.cameras.main.worldView.y + this.scene.cameras.main.worldView.height
+        ) {
+            console.log('destroy foea');
+            this.destroy();
         }
     }
 
     dropBonus() {
         let randomDrop = Phaser.Math.FloatBetween(0, 100);
         if (randomDrop <= this.bonusProbability) {
-            let x = this.parentContainer.x + this.x;
-            let y = this.parentContainer.y + this.y;
-
             let bonus = this.scene.createBonus();
-            bonus.setPosition(x, y);
+            bonus.setPosition(this.x, this.y);
         }
+    }
+
+    set fireRate(ratePerSec) {
+        this.fireDelay = 1000 / ratePerSec;
+    }
+
+    get fireRate() {
+        if (this.fireDelay > 0) {
+            return 1000 / this.fireDelay;
+        }
+        return 1;
     }
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <tileset firstgid="1" source="../spritesheets/foe-spritesheet-tileset.json"/>
+ <object name="gegner-1.png" gid="3" width="75" height="80">
+  <properties>
+   <property name="moveAlgo" value="left-right"/>
+  </properties>
+ </object>
+</template>

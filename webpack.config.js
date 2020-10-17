@@ -1,4 +1,5 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
                 use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.(png|jpe?g|gif|mp3|ogg)$/i,
+                test: /\.(png|jpe?g|gif|mp3|ogg|json)$/i,
                 use: [
                     {
                         loader: 'file-loader',
@@ -40,6 +41,18 @@ module.exports = {
             title: 'Space Invaders!',
             template: './index.html',
             filename: 'index.html',
+        }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    context: path.resolve(__dirname, 'src'),
+                    from: './assets/mapeditor/**/*.json',
+                },
+                {
+                    context: path.resolve(__dirname, 'src'),
+                    from: './assets/mapeditor/**/*.png',
+                },
+            ],
         }),
     ],
 };
