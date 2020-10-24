@@ -4,6 +4,8 @@
  <object name="gegner-1.png" gid="3" width="75" height="80">
   <properties>
    <property name="moveAlgo" value="left-right"/>
+   <property name="moveDistance" type="int" value="200"/>
+   <property name="moveDuration" type="int" value="1000"/>
   </properties>
  </object>
 </template>

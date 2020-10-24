@@ -60,7 +60,7 @@ export default class InfiniteScrollScene extends Phaser.Scene {
         );
 
         let width = worldBound.width;
-        let height = Math.abs(worldBound.height);
+        // let height = Math.abs(worldBound.height);
 
         // Background stars
         this.bg = this.add.tileSprite(0, 0, gameWidth, gameHeight, SPACE_SPRITE).setOrigin(0, 0);
@@ -75,9 +75,11 @@ export default class InfiniteScrollScene extends Phaser.Scene {
         this.bonusGroup = this.add.group();
 
         // Create game items
-        this.createPlayers(width, start);
+        this.playerGroup = this.physics.add.group();
+        this.createPlayers(width, start, this.playerGroup);
         this.createKeysForPlayers();
-        let foeGroup = this.createFoes(map.getObjectLayer('foes').objects);
+        this.foeGroup = this.physics.add.group();
+        this.createFoes(map.getObjectLayer('foes').objects, this.foeGroup);
 
         // Create colliders for players and bonuses:
         this.physics.add.overlap(this.player1, this.bonusGroup, this.onBonusHit, null, this);
@@ -90,7 +92,10 @@ export default class InfiniteScrollScene extends Phaser.Scene {
 
         // Create colliders for foes and player bullets:
         let playerBullets = getPlayerBulletGroup(this);
-        this.physics.add.overlap(foeGroup, playerBullets, this.onFoeHit, null, this);
+        this.physics.add.overlap(this.foeGroup, playerBullets, this.onFoeHit, null, this);
+
+        // Create colliders for foes and players:
+        this.physics.add.overlap(this.foeGroup, this.playerGroup, this.onFoePlayerCollide, null, this);
 
         // // Place live indicators:
         this.liveGroup = this.add.group([this.player1.liveContainer, this.player2.liveContainer]);
@@ -117,23 +122,26 @@ export default class InfiniteScrollScene extends Phaser.Scene {
         this.scene.run(SCENES.getready);
     }
 
-    createPlayers(worldWidth, startPoint) {
+    createPlayers(worldWidth, startPoint, playerGroup) {
         this.player1 = new PlayerShip(this, 0, 0, SHIP_SPRITE_4);
         this.player2 = new PlayerShip(this, 0, 0, SHIP_SPRITE_5);
         let bounds1 = this.player1.getBounds();
         let bounds2 = this.player2.getBounds();
         this.player1.setPosition(50 + bounds1.width / 2, startPoint.y - bounds1.height / 2 - 10);
         this.player2.setPosition(worldWidth - 50 - bounds2.width / 2, startPoint.y - bounds2.height / 2 - 10);
+
+        playerGroup.add(this.player1);
+        playerGroup.add(this.player2);
+        this.player1.afterGroupAdd();
+        this.player2.afterGroupAdd();
     }
 
-    createFoes(foeConfigs) {
-        this.foeGroup = this.physics.add.group();
+    createFoes(foeConfigs, foeGroup) {
         foeConfigs.forEach((config) => {
-            let foe = new Foe(this, config.x, config.y, 'foes', config.name);
-            Object.assign(foe, config);
-            this.foeGroup.add(foe, true);
+            let foe = new Foe(this, config.x, config.y, 'foes', config.name, config);
+            foeGroup.add(foe, true);
         });
-        return this.foeGroup;
+        return foeGroup;
     }
 
     createKeysForPlayers() {
@@ -200,7 +208,7 @@ export default class InfiniteScrollScene extends Phaser.Scene {
 
     onFoeHit(foe, bullet) {
         if (bullet.active) {
-            foe.hit(foe);
+            foe.hit();
             bullet.setActive(false);
             bullet.setVisible(false);
         }
@@ -217,6 +225,17 @@ export default class InfiniteScrollScene extends Phaser.Scene {
             }
         }
         return true;
+    }
+
+    onFoePlayerCollide(foe, player) {
+        if (foe.active && player.active) {
+            foe.hit();
+            player.hit();
+            // If both players are death, game over!
+            if (this.player1.lives <= 0 && this.player2.lives <= 0) {
+                this.initiateGameOver();
+            }
+        }
     }
 
     onBonusHit(player, bonus) {

@@ -11,6 +11,57 @@
  "infinite":true,
  "layers":[
         {
+         "chunks":[
+                {
+                 "data":"eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt",
+                 "height":16,
+                 "width":16,
+                 "x":0,
+                 "y":0
+                }, 
+                {
+                 "data":"eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt",
+                 "height":16,
+                 "width":16,
+                 "x":0,
+                 "y":16
+                }, 
+                {
+                 "data":"eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt",
+                 "height":16,
+                 "width":16,
+                 "x":0,
+                 "y":32
+                }, 
+                {
+                 "data":"eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt",
+                 "height":16,
+                 "width":16,
+                 "x":0,
+                 "y":48
+                }, 
+                {
+                 "data":"eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt",
+                 "height":16,
+                 "width":16,
+                 "x":0,
+                 "y":64
+                }],
+         "compression":"zlib",
+         "encoding":"base64",
+         "height":80,
+         "id":5,
+         "name":"bg",
+         "opacity":1,
+         "startx":0,
+         "starty":0,
+         "type":"tilelayer",
+         "visible":true,
+         "width":16,
+         "x":0,
+         "y":0
+        }, 
+        {
          "draworder":"topdown",
          "id":3,
          "name":"metadata",
@@ -37,6 +88,17 @@
                  "width":1024,
                  "x":0,
                  "y":0
+                }, 
+                {
+                 "height":1024,
+                 "id":67,
+                 "name":"screensize",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":1024,
+                 "x":0,
+                 "y":3976
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -59,13 +121,23 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":199,
-                 "y":4332
+                 "x":396.666666666667,
+                 "y":3600
                 }, 
                 {
                  "gid":3,
@@ -77,13 +149,23 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":458,
-                 "y":4144
+                 "x":546.666666666667,
+                 "y":3900
                 }, 
                 {
                  "gid":3,
@@ -95,31 +177,23 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":75,
-                 "x":530,
-                 "y":4336
-                }, 
-                {
-                 "gid":3,
-                 "height":80,
-                 "id":50,
-                 "name":"gegner-1.png",
-                 "properties":[
+                        }, 
                         {
-                         "name":"moveAlgo",
-                         "type":"string",
-                         "value":"left-right"
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":582,
-                 "y":3472
+                 "x":496.666666666667,
+                 "y":3800
                 }, 
                 {
                  "gid":3,
@@ -131,13 +205,23 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":400
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":804,
-                 "y":3856
+                 "x":446.666666666667,
+                 "y":3700
                 }, 
                 {
                  "gid":4,
@@ -148,20 +232,41 @@
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":191,
-                 "y":2996
+                 "x":465.666666666667,
+                 "y":2689.33333333333
                 }, 
                 {
                  "gid":5,
                  "height":80,
                  "id":53,
                  "name":"gegner-3.png",
+                 "properties":[
+                        {
+                         "name":"applyVelocity",
+                         "type":"int",
+                         "value":50
+                        }, 
+                        {
+                         "name":"fireProbability",
+                         "type":"int",
+                         "value":20
+                        }, 
+                        {
+                         "name":"fireRate",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"velocityX"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":825,
-                 "y":3556
+                 "x":11.6666666666667,
+                 "y":2500
                 }, 
                 {
                  "gid":6,
@@ -172,32 +277,69 @@
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":447,
-                 "y":2956
+                 "x":232.333333333333,
+                 "y":2950.66666666667
                 }, 
                 {
                  "gid":7,
                  "height":80,
                  "id":55,
                  "name":"gegner-5.png",
+                 "properties":[
+                        {
+                         "name":"fireProbability",
+                         "type":"int",
+                         "value":100
+                        }, 
+                        {
+                         "name":"fireRate",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":""
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":271,
-                 "y":3618
+                 "x":701.666666666667,
+                 "y":3174
                 }, 
                 {
                  "gid":8,
                  "height":80,
                  "id":56,
                  "name":"gegner-6.png",
+                 "properties":[
+                        {
+                         "name":"hitCount",
+                         "type":"int",
+                         "value":3
+                        }, 
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"verticalAttack"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":500
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":500
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":261,
-                 "y":4024
+                 "x":773,
+                 "y":3880
                 }, 
                 {
                  "gid":9,
@@ -208,8 +350,8 @@
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":741,
-                 "y":2986
+                 "x":190.333333333333,
+                 "y":1700.66666666667
                 }, 
                 {
                  "gid":10,
@@ -220,8 +362,8 @@
                  "type":"",
                  "visible":true,
                  "width":75,
-                 "x":183,
-                 "y":3234
+                 "x":765.666666666667,
+                 "y":2810
                 }, 
                 {
                  "gid":3,
@@ -233,6 +375,16 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
@@ -251,6 +403,16 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
@@ -269,6 +431,16 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
@@ -287,6 +459,16 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
@@ -305,6 +487,16 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
@@ -323,6 +515,16 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
@@ -341,6 +543,16 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
@@ -359,6 +571,16 @@
                          "name":"moveAlgo",
                          "type":"string",
                          "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
                         }],
                  "rotation":0,
                  "type":"",
@@ -366,6 +588,283 @@
                  "width":75,
                  "x":864,
                  "y":1992
+                }, 
+                {
+                 "gid":3,
+                 "height":80,
+                 "id":68,
+                 "name":"gegner-1.png",
+                 "properties":[
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":75,
+                 "x":175.333333333333,
+                 "y":3200
+                }, 
+                {
+                 "gid":3,
+                 "height":80,
+                 "id":69,
+                 "name":"gegner-1.png",
+                 "properties":[
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":75,
+                 "x":225.333333333333,
+                 "y":3300
+                }, 
+                {
+                 "gid":3,
+                 "height":80,
+                 "id":70,
+                 "name":"gegner-1.png",
+                 "properties":[
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":75,
+                 "x":275.333333333333,
+                 "y":3400
+                }, 
+                {
+                 "gid":3,
+                 "height":80,
+                 "id":71,
+                 "name":"gegner-1.png",
+                 "properties":[
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"left-right"
+                        }, 
+                        {
+                         "name":"moveDistance",
+                         "type":"int",
+                         "value":200
+                        }, 
+                        {
+                         "name":"moveDuration",
+                         "type":"int",
+                         "value":1000
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":75,
+                 "x":325.333333333333,
+                 "y":3500
+                }, 
+                {
+                 "gid":5,
+                 "height":80,
+                 "id":72,
+                 "name":"gegner-3.png",
+                 "properties":[
+                        {
+                         "name":"applyVelocity",
+                         "type":"int",
+                         "value":50
+                        }, 
+                        {
+                         "name":"fireProbability",
+                         "type":"int",
+                         "value":20
+                        }, 
+                        {
+                         "name":"fireRate",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"velocityX"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":75,
+                 "x":93.0000000000001,
+                 "y":2600
+                }, 
+                {
+                 "gid":5,
+                 "height":80,
+                 "id":73,
+                 "name":"gegner-3.png",
+                 "properties":[
+                        {
+                         "name":"applyVelocity",
+                         "type":"int",
+                         "value":50
+                        }, 
+                        {
+                         "name":"fireProbability",
+                         "type":"int",
+                         "value":20
+                        }, 
+                        {
+                         "name":"fireRate",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"velocityX"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":75,
+                 "x":173,
+                 "y":2700
+                }, 
+                {
+                 "gid":5,
+                 "height":80,
+                 "id":74,
+                 "name":"gegner-3.png",
+                 "properties":[
+                        {
+                         "name":"applyVelocity",
+                         "type":"int",
+                         "value":50
+                        }, 
+                        {
+                         "name":"fireProbability",
+                         "type":"int",
+                         "value":20
+                        }, 
+                        {
+                         "name":"fireRate",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"velocityX"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":75,
+                 "x":245,
+                 "y":2800
+                }, 
+                {
+                 "gid":5,
+                 "height":80,
+                 "id":75,
+                 "name":"gegner-3.png",
+                 "properties":[
+                        {
+                         "name":"applyVelocity",
+                         "type":"int",
+                         "value":50
+                        }, 
+                        {
+                         "name":"fireProbability",
+                         "type":"int",
+                         "value":20
+                        }, 
+                        {
+                         "name":"fireRate",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"velocityX"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":75,
+                 "x":326.333333333333,
+                 "y":2900
+                }, 
+                {
+                 "gid":5,
+                 "height":80,
+                 "id":76,
+                 "name":"gegner-3.png",
+                 "properties":[
+                        {
+                         "name":"applyVelocity",
+                         "type":"int",
+                         "value":50
+                        }, 
+                        {
+                         "name":"fireProbability",
+                         "type":"int",
+                         "value":20
+                        }, 
+                        {
+                         "name":"fireRate",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"moveAlgo",
+                         "type":"string",
+                         "value":"velocityX"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":75,
+                 "x":450,
+                 "y":3000
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -373,8 +872,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":4,
- "nextobjectid":67,
+ "nextlayerid":6,
+ "nextobjectid":77,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
@@ -383,6 +882,10 @@
         {
          "firstgid":1,
          "source":"..\/spritesheets\/foe-spritesheet-tileset.json"
+        }, 
+        {
+         "firstgid":11,
+         "source":"tilesets\/bg.json"
         }],
  "tilewidth":64,
  "type":"map",

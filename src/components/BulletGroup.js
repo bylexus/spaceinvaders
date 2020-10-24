@@ -41,7 +41,7 @@ let playerBulletGroup = null;
 
 export function getFoeBulletGroup(scene) {
     if (!foeBulletGroup) {
-        foeBulletGroup = new BulletGroup(scene, 100);
+        foeBulletGroup = new BulletGroup(scene, 200);
         foeBulletGroup.velocity = 400;
     }
     return foeBulletGroup;

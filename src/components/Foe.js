@@ -4,8 +4,12 @@ import Bonus from './Bonus';
 import { EXPLOSION_SOUND, EXPLOSION_SPRITE } from '../constants';
 
 export default class Foe extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, key, frame) {
+    constructor(scene, x, y, key, frame, config = {}) {
         super(scene, x, y, key, frame);
+
+        config = config || {};
+
+        this.boundsCache = new Phaser.Geom.Rectangle();
 
         // Needed to init scene and physics:
         scene.add.existing(this);
@@ -14,17 +18,101 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite {
 
         this.setOrigin(0.5, 1);
 
-        this.bullets = getFoeBulletGroup(scene, 100);
+        // Defaults:
+        this.bullets = getFoeBulletGroup(scene);
         this.bonusProbability = 5;
-        this.firePropability = 20;
+        this.fireProbability = 20;
         this.fireRate = 2; // per second
         this.hitCount = 1;
+
+        /**
+         * Supported movement algorithms:
+         * - moveAlgo = 'left-right': swipes from left to right
+         *   - moveDistance, moveDuration
+         * - moveAlgo = 'velocityX': moves in one x direction with the given velocity
+         *   - applyVelocity
+         * - moveAlgo = 'verticalAttack': swipes down an up again
+         *   - moveDistance, moveDuration
+         */
+        this.moveAlgo = null;
+        this.moveDistance = 0;
+        this.moveDuration = 0;
+
+        this.applyCustomProperties(config.properties || []);
+        this.initAnimations();
 
         this.lastShoot = 0;
 
         if (!scene.sound.get(EXPLOSION_SOUND)) {
             scene.sound.add(EXPLOSION_SOUND);
         }
+    }
+
+    applyCustomProperties(props) {
+        props.forEach((item) => {
+            if (item.name) {
+                this[item.name] = item.value;
+            }
+        });
+    }
+
+    initAnimations() {
+        if (this.moveAlgo === 'left-right') {
+            this.initLeftRightMoveAnim(this.moveDistance, this.moveDuration);
+        }
+        if (this.moveAlgo === 'verticalAttack') {
+            this.initVerticalAttackAnim(this.moveDistance, this.moveDuration);
+        }
+        if (this.moveAlgo === 'velocityX') {
+            this.setVelocityX(0);
+            // we create an animation-like object here, to use the same methods later on:
+            this.moveAnimation = {
+                play: () => this.setVelocityX(this.applyVelocity || 200),
+                isPlaying: () => this.velocityX < 0 || this.velocityX > 0,
+                stop: () => this.setVelocityX(0),
+                pause: () => this.setVelocityX(0),
+            };
+        }
+    }
+
+    initLeftRightMoveAnim(moveDistance, moveDuration) {
+        this.moveAnimation = this.scene.tweens.timeline({
+            targets: this,
+            totalDuration: moveDuration,
+            ease: 'Sine.easeInOut',
+            repeat: -1,
+            yoyo: true,
+            tweens: [
+                {
+                    x: this.x + moveDistance,
+                },
+            ],
+        });
+        // If timeline starts with paused config = true, it will never start. So we set it after initialization...
+        setTimeout(() => {
+            this.moveAnimation.pause();
+        }, 0);
+    }
+
+    initVerticalAttackAnim(moveDistance, moveDuration) {
+        this.moveAnimation = this.scene.tweens.timeline({
+            targets: this,
+            totalDuration: moveDuration,
+            ease: 'Sine.easeOut',
+            repeat: -1,
+            delay: 1000,
+            repeatDelay: 2000,
+            yoyo: true,
+            tweens: [
+                {
+                    y: this.y + moveDistance,
+                },
+            ],
+        });
+        // If timeline starts with paused config = true, it will never start. So we set it after initialization...
+        setTimeout(() => {
+            this.moveAnimation.pause();
+        }, 0);
     }
 
     static preload(scene) {
@@ -43,7 +131,7 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite {
             if (time - this.lastShoot > this.fireDelay) {
                 this.lastShoot = time;
                 let randomFire = Phaser.Math.FloatBetween(0, 100);
-                if (randomFire <= this.firePropability) {
+                if (randomFire <= this.fireProbability) {
                     this.bullets.fireBullet(this.x, this.y, time);
                 }
             }
@@ -97,12 +185,21 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite {
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
         this.fire(time);
+        // When in sight, start animation, if necessary:
+        this.getBounds(this.boundsCache);
+        if (
+            this.scene.cameras.main.worldView.contains(this.boundsCache.left, this.boundsCache.top) ||
+            this.scene.cameras.main.worldView.contains(this.boundsCache.right, this.boundsCache.bottom)
+        ) {
+            if (this.moveAnimation && !this.moveAnimation.isPlaying()) {
+                this.moveAnimation.play();
+            }
+        }
         // Is foe out of sight (bottom)? then destroy it to save resources:
         if (
             this.scene.gameRuns &&
-            this.getBounds().top > this.scene.cameras.main.worldView.y + this.scene.cameras.main.worldView.height
+            this.boundsCache.top > this.scene.cameras.main.worldView.y + this.scene.cameras.main.worldView.height + 200
         ) {
-            console.log('destroy foea');
             this.destroy();
         }
     }

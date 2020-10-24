@@ -36,6 +36,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(time, delta);
 
         this.getBounds(this.boundsCache);
+        // When within camera view, set the bullet active, else stop it
         if (
             this.scene.cameras.main.worldView.contains(this.boundsCache.left, this.boundsCache.top) ||
             this.scene.cameras.main.worldView.contains(this.boundsCache.right, this.boundsCache.bottom)

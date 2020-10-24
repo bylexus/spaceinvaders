@@ -8,13 +8,13 @@ const EXPLOSION_SOUND = 'explosion1';
 const FIRE_MODES = {
     STAGE_1: (player) => {
         player.nrOfCannons = 1;
-        player.fireRate = 2;
+        player.fireRate = 1;
     },
     STAGE_2: (player) => {
-        player.fireRate = 4;
+        player.fireRate = 2;
     },
     STAGE_3: (player) => {
-        player.fireRate = 6;
+        player.fireRate = 4;
     },
     STAGE_4: (player) => {
         player.nrOfCannons = 2;
@@ -40,10 +40,6 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
         this.fireMode = 'STAGE_1';
         this.setFireMode(this.fireMode);
 
-        this.setBounce(0.2);
-        this.setOrigin(0.5, 0);
-        this.setCollideWorldBounds(true);
-
         this.bullets = getPlayerBulletGroup(scene);
         this.autoFire = true;
 
@@ -51,6 +47,17 @@ export default class PlayerShip extends Phaser.Physics.Arcade.Sprite {
         this.lives = 3;
 
         this.moveSpeed = 300;
+    }
+
+    /**
+     * If a sprite is added to a group, some props are reset (for me this seems to be a bug,
+     * but who am I to question this...). So this function fixes those things.
+     */
+    afterGroupAdd() {
+        this.setBounce(0.2);
+        this.setOrigin(0.5, 0);
+        this.setCollideWorldBounds(true);
+
     }
 
     static preload(scene) {

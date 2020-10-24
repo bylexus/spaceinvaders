@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
  <tileset firstgid="1" source="../spritesheets/foe-spritesheet-tileset.json"/>
- <object name="gegner-6.png" gid="8" width="75" height="80"/>
+ <object name="gegner-6.png" gid="8" width="75" height="80">
+  <properties>
+   <property name="hitCount" type="int" value="3"/>
+   <property name="moveAlgo" value="verticalAttack"/>
+   <property name="moveDistance" type="int" value="500"/>
+   <property name="moveDuration" type="int" value="500"/>
+  </properties>
+ </object>
 </template>

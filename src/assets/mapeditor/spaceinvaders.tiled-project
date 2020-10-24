@@ -6,7 +6,8 @@
     "folders": [
         "Templates",
         "levels",
-        "spritesheets"
+        "spritesheets",
+        "tilesets"
     ],
     "objectTypesFile": ""
 }

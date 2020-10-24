@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
  <tileset firstgid="1" source="../spritesheets/foe-spritesheet-tileset.json"/>
- <object name="gegner-3.png" gid="5" width="75" height="80"/>
+ <object name="gegner-3.png" gid="5" width="75" height="80">
+  <properties>
+   <property name="applyVelocity" type="int" value="50"/>
+   <property name="fireProbability" type="int" value="20"/>
+   <property name="fireRate" type="int" value="2"/>
+   <property name="moveAlgo" value="velocityX"/>
+  </properties>
+ </object>
 </template>

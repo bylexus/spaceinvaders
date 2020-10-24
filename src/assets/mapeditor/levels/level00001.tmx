@@ -1,28 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="16" height="100" tilewidth="64" tileheight="64" infinite="1" nextlayerid="4" nextobjectid="67">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="16" height="100" tilewidth="64" tileheight="64" infinite="1" nextlayerid="6" nextobjectid="77">
  <editorsettings>
   <export target="level00001.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="../spritesheets/foe-spritesheet-tileset.json"/>
+ <tileset firstgid="11" source="tilesets/bg.json"/>
+ <layer id="5" name="bg" width="16" height="100">
+  <data encoding="base64" compression="zlib">
+   <chunk x="0" y="0" width="16" height="16">
+   eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt
+  </chunk>
+   <chunk x="0" y="16" width="16" height="16">
+   eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt
+  </chunk>
+   <chunk x="0" y="32" width="16" height="16">
+   eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt
+  </chunk>
+   <chunk x="0" y="48" width="16" height="16">
+   eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt
+  </chunk>
+   <chunk x="0" y="64" width="16" height="16">
+   eJxjYBgFAwm4KZQfBUMbDHT8AwBDQAAt
+  </chunk>
+  </data>
+ </layer>
  <objectgroup id="3" name="metadata">
   <object id="28" name="start" x="0" y="5000">
    <point/>
   </object>
   <object id="29" name="worldbound" x="0" y="0" width="1024" height="5000"/>
+  <object id="67" name="screensize" x="0" y="3976" width="1024" height="1024"/>
  </objectgroup>
  <objectgroup id="2" name="foes">
-  <object id="47" template="../Templates/gegner-1.png.tx" x="197" y="4324"/>
-  <object id="48" template="../Templates/gegner-1.png.tx" x="458" y="4144"/>
-  <object id="49" template="../Templates/gegner-1.png.tx" x="636" y="4318"/>
-  <object id="50" template="../Templates/gegner-1.png.tx" x="582" y="3472"/>
-  <object id="51" template="../Templates/gegner-1.png.tx" x="804" y="3856"/>
-  <object id="52" template="../Templates/gegner-2.png.tx" x="191" y="2996"/>
-  <object id="53" template="../Templates/gegner-3.png.tx" x="825" y="3556"/>
-  <object id="54" template="../Templates/gegner-4.png.tx" x="447" y="2956"/>
-  <object id="55" template="../Templates/gegner-5.png.tx" x="271" y="3618"/>
-  <object id="56" template="../Templates/gegner-6.png.tx" x="261" y="4024"/>
-  <object id="57" template="../Templates/gegner-7.png.tx" x="741" y="2986"/>
-  <object id="58" template="../Templates/gegner-8.png.tx" x="183" y="3234"/>
+  <object id="47" template="../Templates/gegner-1.png.tx" x="396.667" y="3600">
+   <properties>
+    <property name="moveDuration" type="int" value="1000"/>
+   </properties>
+  </object>
+  <object id="48" template="../Templates/gegner-1.png.tx" x="546.667" y="3900"/>
+  <object id="49" template="../Templates/gegner-1.png.tx" x="496.667" y="3800"/>
+  <object id="51" template="../Templates/gegner-1.png.tx" x="446.667" y="3700">
+   <properties>
+    <property name="moveDistance" type="int" value="400"/>
+   </properties>
+  </object>
+  <object id="52" template="../Templates/gegner-2.png.tx" x="465.667" y="2689.33"/>
+  <object id="53" template="../Templates/gegner-3.png.tx" x="11.6667" y="2500"/>
+  <object id="54" template="../Templates/gegner-4.png.tx" x="232.333" y="2950.67"/>
+  <object id="55" template="../Templates/gegner-5.png.tx" x="701.667" y="3174"/>
+  <object id="56" template="../Templates/gegner-6.png.tx" x="773" y="3880"/>
+  <object id="57" template="../Templates/gegner-7.png.tx" x="190.333" y="1700.67"/>
+  <object id="58" template="../Templates/gegner-8.png.tx" x="765.667" y="2810"/>
   <object id="59" template="../Templates/gegner-1.png.tx" x="34" y="1984"/>
   <object id="60" template="../Templates/gegner-1.png.tx" x="128" y="1986"/>
   <object id="61" template="../Templates/gegner-1.png.tx" x="234" y="1990"/>
@@ -31,5 +59,18 @@
   <object id="64" template="../Templates/gegner-1.png.tx" x="600" y="2002"/>
   <object id="65" template="../Templates/gegner-1.png.tx" x="732" y="1992"/>
   <object id="66" template="../Templates/gegner-1.png.tx" x="864" y="1992"/>
+  <object id="68" template="../Templates/gegner-1.png.tx" x="175.333" y="3200">
+   <properties>
+    <property name="moveDuration" type="int" value="1000"/>
+   </properties>
+  </object>
+  <object id="69" template="../Templates/gegner-1.png.tx" x="225.333" y="3300"/>
+  <object id="70" template="../Templates/gegner-1.png.tx" x="275.333" y="3400"/>
+  <object id="71" template="../Templates/gegner-1.png.tx" x="325.333" y="3500"/>
+  <object id="72" template="../Templates/gegner-3.png.tx" x="93" y="2600"/>
+  <object id="73" template="../Templates/gegner-3.png.tx" x="173" y="2700"/>
+  <object id="74" template="../Templates/gegner-3.png.tx" x="245" y="2800"/>
+  <object id="75" template="../Templates/gegner-3.png.tx" x="326.333" y="2900"/>
+  <object id="76" template="../Templates/gegner-3.png.tx" x="450" y="3000"/>
  </objectgroup>
 </map>

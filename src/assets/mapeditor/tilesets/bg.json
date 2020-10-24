@@ -1,0 +1,24 @@
+{ "columns":0,
+ "grid":
+    {
+     "height":1,
+     "orientation":"orthogonal",
+     "width":1
+    },
+ "margin":0,
+ "name":"bg",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"1.4.2",
+ "tileheight":512,
+ "tiles":[
+        {
+         "id":0,
+         "image":"..\/..\/..\/..\/..\/dist\/assets\/space.png",
+         "imageheight":512,
+         "imagewidth":512
+        }],
+ "tilewidth":512,
+ "type":"tileset",
+ "version":1.4
+}
